@@ -6,17 +6,21 @@ public class MomentumManager : MonoBehaviour
     public static MomentumManager Instance;
     // References
     [SerializeField] private PlayerMovement player;
-    [SerializeField] private Slider momentumBar;
+    [SerializeField] private Slider horizontalMomentumBar;
+    [SerializeField] private Slider jumpMomentumBar;
 
-    [SerializeField] private float maxMomentum;
-    public float currentMomentum { get; private set; }
+    public float currentHorizontalMomentum { get; private set; }
+    [SerializeField] private float maxHorizontalMomentum;
 
-    [SerializeField] private float momentumIncrease;
+    public float currentJumpMomentum { get; private set; }
+    [SerializeField] private float maxJumpMomentum;
 
     private void Awake()
     {
-        currentMomentum = 0f;
-        momentumBar.value = 0f;
+        currentHorizontalMomentum = 0f;
+        currentJumpMomentum = 0f;
+        horizontalMomentumBar.value = 0f;
+        jumpMomentumBar.value = 0f;
 
         // Basic Singleton
         if (Instance == null)
@@ -27,32 +31,51 @@ public class MomentumManager : MonoBehaviour
 
     private void Update()
     {
-        currentMomentum -= Time.deltaTime;
+        currentHorizontalMomentum -= Time.deltaTime;
+        currentJumpMomentum -= 2 * Time.deltaTime;
 
         CheckMomentumStatus();
         UpdateMomentumBar();
     }
 
-    public void ModifyMomentum(float change)
+    public void ModifyHorizontalMomentum(float change)
     {
-        currentMomentum += change;
+        currentHorizontalMomentum += change;
+    }
+
+    public void ModifyJumpForce(float change)
+    {
+        currentJumpMomentum += change;
     }
 
     private void CheckMomentumStatus()
     {
-        if (currentMomentum < 0)
+        // Horizontal
+        if (currentHorizontalMomentum < 0)
         {
-            currentMomentum = 0;
+            currentHorizontalMomentum = 0;
         }
-        else if (currentMomentum > maxMomentum)
+        else if (currentHorizontalMomentum > maxHorizontalMomentum)
         {
-            currentMomentum = maxMomentum;
+            currentHorizontalMomentum = maxHorizontalMomentum;
         }
-        player.CalculateMovementSpeed(this);
+
+        if (currentJumpMomentum < 0)
+        {
+            currentJumpMomentum = 0;
+        }
+        else if (currentJumpMomentum > maxHorizontalMomentum)
+        {
+            currentJumpMomentum = maxJumpMomentum;
+        }
+
+        player.CalculateMovementSpeed();
+        player.CalculateJumpForce();
     }
 
     private void UpdateMomentumBar()
     {
-        momentumBar.value = currentMomentum / maxMomentum;
+        horizontalMomentumBar.value = currentHorizontalMomentum / maxHorizontalMomentum;
+        jumpMomentumBar.value = currentJumpMomentum / maxJumpMomentum;
     }
 }

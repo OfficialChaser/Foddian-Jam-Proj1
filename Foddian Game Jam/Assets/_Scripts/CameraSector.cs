@@ -41,7 +41,7 @@ public class CameraSector : MonoBehaviour
             camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition, Time.deltaTime * smoothSpeed);
 
             // Check if the camera is close enough to the target position to stop panning
-            if (Vector3.Distance(camera.transform.position, targetPosition) < 0.1f)
+            if (Vector3.Distance(camera.transform.position, targetPosition) < 0.01f)
             {
                 panning = false;
             }

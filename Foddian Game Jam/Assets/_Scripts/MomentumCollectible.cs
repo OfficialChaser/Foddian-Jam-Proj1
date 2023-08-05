@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class MomentumCollectible : MonoBehaviour
 {
-    [SerializeField] private float increaseAmt;
-    [SerializeField] private float decreaseAmt;
+    [SerializeField] private float changeAmt;
 
     // Self References
     private BoxCollider2D bCollider;
@@ -15,8 +14,8 @@ public class MomentumCollectible : MonoBehaviour
 
     public enum Type 
     {
-        Increase,
-        Decrease
+        Move,
+        Jump
     }
 
     public Type type;
@@ -31,11 +30,11 @@ public class MomentumCollectible : MonoBehaviour
     {
         switch (type)
         {
-            case Type.Increase:
-                MomentumManager.Instance.ModifyMomentum(increaseAmt);
+            case Type.Move:
+                MomentumManager.Instance.ModifyHorizontalMomentum(changeAmt);
                 break;
-            case Type.Decrease:
-                MomentumManager.Instance.ModifyMomentum(-decreaseAmt);
+            case Type.Jump:
+                MomentumManager.Instance.ModifyJumpForce(changeAmt);
                 break;
         }
     }

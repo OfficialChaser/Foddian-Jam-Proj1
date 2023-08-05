@@ -14,8 +14,8 @@ public class PlayerMovement : MonoBehaviour {
 
     // Jumping vars
     [SerializeField] private float jumpForce;
-    private float jumpTimeCounter;
-    [SerializeField] private float jumpTime;
+    private bool canJump = true;
+    private float baseJumpForce;
     
     
     [SerializeField] private float timeBtwJumps;
@@ -26,22 +26,12 @@ public class PlayerMovement : MonoBehaviour {
     public bool isRunning { get; private set; }
     public bool isJumping { get; private set; }
     public bool isFalling { get; private set; }
-    public bool isDashing { get; private set; }
-    public bool isCrouching { get; private set; }
 
     // Grounded vars
     public bool isGrounded { get; private set; }
     [SerializeField] private Transform feetPos;
     [SerializeField] private float checkRadius;
     [SerializeField] private LayerMask groundLayer;
-
-    // Coyote time
-    [SerializeField] private float coyoteTime = 0.2f;
-    private float coyoteTimeCounter;
-
-    // Jump buffer
-    [SerializeField] private float jumpBufferTime = 0.2f;
-    private float jumpBufferCounter;
 
     // Fall Clamp
     [SerializeField] private float fallClamp = -10f;
@@ -56,6 +46,7 @@ public class PlayerMovement : MonoBehaviour {
     {
         rb = GetComponent<Rigidbody2D>();
         baseMoveSpeed = moveSpeed;
+        baseJumpForce = jumpForce;
         baseTimeBtwJumps = timeBtwJumps;
         jumpTimer = timeBtwJumps;
     }
@@ -73,35 +64,19 @@ public class PlayerMovement : MonoBehaviour {
     {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, groundLayer);
 
-        CheckCoyoteTime();
+        CheckJumpTime();
 
-        CheckJumpBuffer();
-
-        if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f) {
+        if (canJump && isGrounded) {
             isJumping = true;
             jumpTimer = 0f;
             isFalling = false;
-            jumpTimeCounter = jumpTime;
+            canJump = false;
             rb.velocity = Vector2.up * jumpForce;
-        }
-
-        if (Input.GetButton("Jump") && isJumping == true) {
-            
-            if (jumpTimeCounter > 0) {
-                rb.velocity = Vector2.up * jumpForce;
-                jumpTimeCounter -= Time.deltaTime;
-            } else {
-                isJumping = false;
-                isFalling = true;
-            }
-
         }
     
         if (rb.velocity.y < 0f) {
             isJumping = false;
             isFalling = true;
-
-            coyoteTimeCounter = 0f;
         }
 
         if (isFalling)
@@ -112,32 +87,12 @@ public class PlayerMovement : MonoBehaviour {
         UpdateStateBools();
     }
 
-    // Handling Animation in LateUpdate
-
-
-    private void CheckCoyoteTime()
-    {
-        if (isGrounded)
-        {
-            coyoteTimeCounter = coyoteTime;
-        }
-        else
-        {
-            coyoteTimeCounter -= Time.deltaTime;
-        }
-    }
-
-    private void CheckJumpBuffer()
+    private void CheckJumpTime()
     {
         jumpTimer += Time.deltaTime;
-        if (jumpTimer >= timeBtwJumps)
+        if (jumpTimer > timeBtwJumps)
         {
-            jumpBufferCounter = jumpBufferTime;
-            jumpTimer = timeBtwJumps;
-        }
-        else
-        {
-            jumpBufferCounter -= Time.deltaTime;
+            canJump = true;
         }
     }
 
@@ -176,9 +131,14 @@ public class PlayerMovement : MonoBehaviour {
         moveSpeed = speed;
     }
 
-    public void CalculateMovementSpeed(MomentumManager m_Manager)
+    public void CalculateMovementSpeed()
     {
-        moveSpeed = baseMoveSpeed + (m_Manager.currentMomentum / 3.5f);
-        timeBtwJumps = baseTimeBtwJumps - (m_Manager.currentMomentum / 30f);
+        moveSpeed = baseMoveSpeed + (MomentumManager.Instance.currentHorizontalMomentum / 3.5f);
+    }
+
+    public void CalculateJumpForce()
+    {
+        timeBtwJumps = baseTimeBtwJumps - (MomentumManager.Instance.currentHorizontalMomentum / 30f);
+        jumpForce = baseJumpForce + (MomentumManager.Instance.currentJumpMomentum);
     }
 }

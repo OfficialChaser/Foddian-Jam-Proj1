@@ -22,10 +22,7 @@ public class GlassBlock : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (other.gameObject.GetComponent<PlayerMovement>().isGrounded)
-            {
-                StartCoroutine(GlassBreakAndRegenerateSequence());
-            }
+            StartCoroutine(GlassBreakAndRegenerateSequence());
         }
     }
 
