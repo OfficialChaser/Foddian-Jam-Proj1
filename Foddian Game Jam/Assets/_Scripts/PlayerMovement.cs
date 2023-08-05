@@ -7,13 +7,19 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private PlayerSpriteRenderer playerSpriteRenderer;
 
     // Moving vars
+    [SerializeField] private float baseMoveSpeed;
     [SerializeField] private float moveSpeed;
     private float moveInput;
+    private bool horizontalMovement = true;
 
     // Jumping vars
     [SerializeField] private float jumpForce;
     private float jumpTimeCounter;
     [SerializeField] private float jumpTime;
+    
+    
+    [SerializeField] private float timeBtwJumps;
+    private float jumpTimer;
 
     // State vars
     public bool isRunning { get; private set; }
@@ -39,9 +45,6 @@ public class PlayerMovement : MonoBehaviour {
     // Fall Clamp
     [SerializeField] private float fallClamp = -10f;
 
-    // Dust Particles
-
-
     // Animation vars
     const string PLAYER_IDLE = "Player Idle";
     const string PLAYER_RUN = "Player Run";
@@ -51,11 +54,15 @@ public class PlayerMovement : MonoBehaviour {
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        baseMoveSpeed = moveSpeed;
     }
 
     void FixedUpdate()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
+        if (horizontalMovement)
+        {
+            moveInput = Input.GetAxisRaw("Horizontal");
+        }
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
     }
 
@@ -86,7 +93,7 @@ public class PlayerMovement : MonoBehaviour {
 
         }
     
-        if (Input.GetButtonUp("Jump")) {
+        if (rb.velocity.y < 0f) {
             isJumping = false;
             isFalling = true;
 
@@ -118,9 +125,11 @@ public class PlayerMovement : MonoBehaviour {
 
     private void CheckJumpBuffer()
     {
-        if (Input.GetButtonDown("Jump"))
+        jumpTimer += Time.deltaTime;
+        if (jumpTimer >= timeBtwJumps)
         {
             jumpBufferCounter = jumpBufferTime;
+            jumpTimer = timeBtwJumps;
         }
         else
         {
@@ -133,6 +142,11 @@ public class PlayerMovement : MonoBehaviour {
         if (rb.velocity.y < fallClamp)
         {
             rb.velocity = new Vector2(rb.velocity.x, fallClamp);
+            horizontalMovement = false;
+        }
+        else
+        {
+            horizontalMovement = true;
         }
     }
 
@@ -151,5 +165,15 @@ public class PlayerMovement : MonoBehaviour {
             isJumping = false;
             isFalling = false;
         }
+    }
+
+    public void SetSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
+
+    public void CalculateMovementSpeed(MomentumManager m_Manager)
+    {
+        moveSpeed = baseMoveSpeed + (m_Manager.currentMomentum / 3);
     }
 }
