@@ -9,7 +9,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Collectible"))
         {
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<MomentumCollectible>().Collect();
         }
 
     }

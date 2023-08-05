@@ -11,9 +11,7 @@ public class MomentumCollectible : MonoBehaviour
     private BoxCollider2D bCollider;
     private SpriteRenderer spriteRenderer;
 
-    [SerializeField] private float lifespan;
     [SerializeField] private float regenerationTime;
-    private float currentRegenerationTime;
 
     public enum Type 
     {
@@ -44,8 +42,18 @@ public class MomentumCollectible : MonoBehaviour
 
     public void Collect()
     {
-
+        StartCoroutine(RegenerateCollectible());
     }
 
+    private IEnumerator RegenerateCollectible()
+    {
+        bCollider.enabled = false;
+        spriteRenderer.enabled = false;
+
+        yield return new WaitForSeconds(regenerationTime);
+
+        bCollider.enabled = true;
+        spriteRenderer.enabled = true;
+    }
 
 }

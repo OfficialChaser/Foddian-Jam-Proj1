@@ -145,4 +145,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   increaseAmt: 4
   decreaseAmt: 0
+  regenerationTime: 7
   type: 0

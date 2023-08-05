@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour {
     
     
     [SerializeField] private float timeBtwJumps;
+    private float baseTimeBtwJumps;
     private float jumpTimer;
 
     // State vars
@@ -55,6 +56,8 @@ public class PlayerMovement : MonoBehaviour {
     {
         rb = GetComponent<Rigidbody2D>();
         baseMoveSpeed = moveSpeed;
+        baseTimeBtwJumps = timeBtwJumps;
+        jumpTimer = timeBtwJumps;
     }
 
     void FixedUpdate()
@@ -76,6 +79,7 @@ public class PlayerMovement : MonoBehaviour {
 
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f) {
             isJumping = true;
+            jumpTimer = 0f;
             isFalling = false;
             jumpTimeCounter = jumpTime;
             rb.velocity = Vector2.up * jumpForce;
@@ -174,6 +178,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public void CalculateMovementSpeed(MomentumManager m_Manager)
     {
-        moveSpeed = baseMoveSpeed + (m_Manager.currentMomentum / 3);
+        moveSpeed = baseMoveSpeed + (m_Manager.currentMomentum / 3.5f);
+        timeBtwJumps = baseTimeBtwJumps - (m_Manager.currentMomentum / 30f);
     }
 }

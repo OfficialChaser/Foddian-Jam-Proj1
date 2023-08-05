@@ -44,6 +44,10 @@ public class MomentumManager : MonoBehaviour
         {
             currentMomentum = 0;
         }
+        else if (currentMomentum > maxMomentum)
+        {
+            currentMomentum = maxMomentum;
+        }
         player.CalculateMovementSpeed(this);
     }
 
