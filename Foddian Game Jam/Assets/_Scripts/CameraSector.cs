@@ -18,9 +18,11 @@ public class CameraSector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(panning);
         if (other.gameObject.CompareTag("Player") && !panning)
         {
             panning = true;
+            CameraLogic.Instance.inSector = true;
         }
     }
 
@@ -29,12 +31,12 @@ public class CameraSector : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             panning = false;
+            CameraLogic.Instance.inSector = false;
         }
     }
 
     private void LateUpdate()
     {
-        Debug.Log(panning);
         if (panning)
         {
             Vector3 targetPosition = new Vector3(transform.position.x, transform.position.y + offsetY, camera.transform.position.z);

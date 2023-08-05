@@ -26,7 +26,7 @@ public class MomentumCollectible : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void OnBecameInvisible()
+    public void Collect()
     {
         switch (type)
         {
@@ -37,10 +37,7 @@ public class MomentumCollectible : MonoBehaviour
                 MomentumManager.Instance.ModifyJumpForce(changeAmt);
                 break;
         }
-    }
 
-    public void Collect()
-    {
         StartCoroutine(RegenerateCollectible());
     }
 

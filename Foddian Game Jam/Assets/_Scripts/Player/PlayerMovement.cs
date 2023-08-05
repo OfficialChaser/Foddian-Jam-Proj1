@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 
     // References
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     [SerializeField] private PlayerSpriteRenderer playerSpriteRenderer;
 
     // Moving vars
