@@ -37,15 +37,15 @@ public class GlassBlock : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            if (elapsed > 0.75f)
+            if (elapsed > lifespan / 4f)
             {
                 spriteRenderer.sprite = sprites[0];
             } 
-            else if (elapsed > 0.5f)
+            else if (elapsed > lifespan / 2f)
             {
                 spriteRenderer.sprite = sprites[1];
             }
-            else if (elapsed > 0.25f)
+            else if (elapsed > lifespan / 0.5f)
             {
                 spriteRenderer.sprite = sprites[2];
             }
@@ -63,6 +63,7 @@ public class GlassBlock : MonoBehaviour
         yield return new WaitForSeconds(regenerationTime);
 
         bCollider.enabled = true;
+        spriteRenderer.sprite = sprites[0];
         spriteRenderer.enabled = true;
     }
 }

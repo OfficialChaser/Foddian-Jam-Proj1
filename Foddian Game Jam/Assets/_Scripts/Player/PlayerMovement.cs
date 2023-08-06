@@ -22,9 +22,6 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float timeBtwJumps;
     private float baseTimeBtwJumps;
     private float jumpTimer;
-
-    // State vars
-    public bool isRunning { get; private set; }
     public bool isJumping { get; private set; }
     public bool isFalling { get; private set; }
 
@@ -38,9 +35,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float fallClamp = -10f;
 
     // Animation vars
-    const string PLAYER_IDLE = "Player Idle";
-    const string PLAYER_RUN = "Player Run";
-    const string PLAYER_JUMP = "Player Jump";
+    const string Player_Jump = "Player Jump";
     const string PLAYER_FALL = "Player Fall";
 
     void Start()
@@ -54,6 +49,7 @@ public class PlayerMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
+        Debug.Log(horizontalMovement);
         if (horizontalMovement)
         {
             moveInput = Input.GetAxisRaw("Horizontal");
@@ -64,34 +60,22 @@ public class PlayerMovement : MonoBehaviour {
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, groundLayer);
-		if (isGrounded){
-			animator.SetBool("isGrounded", true);
-		} else {
-			animator.SetBool("isGrounded", false);
-		}
+
+        CalculateMovementSpeed();
+        CalculateJumpForce();
+
+
         CheckJumpTime();
 
         if (canJump && isGrounded) {
-            isJumping = true;
-			animator.SetBool("isJumping", true);
-			
-            jumpTimer = 0f;
-            isFalling = false;
-			animator.SetBool("isFalling", false);
-			
-            canJump = false;
-			isGrounded = false;
-			animator.SetBool("isGrounded", false);
-            rb.velocity = Vector2.up * jumpForce;
-        }
-		
-        if (rb.velocity.y < 0f) {
-            isJumping = false;
-			animator.SetBool("isJumping", false);
-			
-            isFalling = true;
-			animator.SetBool("isFalling", true);
-        }
+                if (!isJumping) {
+                    isJumping = true;
+                    jumpTimer = 0f;
+                    isFalling = false;
+                    canJump = false;
+                    rb.velocity = Vector2.up * jumpForce;
+                }
+            }
 
         if (isFalling)
         {
@@ -101,13 +85,41 @@ public class PlayerMovement : MonoBehaviour {
         UpdateStateBools();
     }
 
+    void LateUpdate()
+    {
+        // Player Animation
+        if (isGrounded)
+        {
+            playerSpriteRenderer.ChangeAnimationState("Player_Jump");
+        } 
+        else 
+        {
+            if (isJumping)
+            {
+                playerSpriteRenderer.ChangeAnimationState("Player_Jump_Loop");
+            }
+            else if (isFalling)
+            {
+                playerSpriteRenderer.ChangeAnimationState("Player_Fall_Loop");
+            }
+        }
+
+        if (moveInput < 0f)
+        {
+            this.transform.eulerAngles = new Vector3(0f, 180f, 0f);
+        }
+        else if (moveInput > 0f)
+        {
+            this.transform.eulerAngles = Vector3.zero;
+        }
+    }
+
     private void CheckJumpTime()
     {
         jumpTimer += Time.deltaTime;
         if (jumpTimer > timeBtwJumps)
         {
             canJump = true;
-			animator.SetBool("canJump", true);
         }
     }
 
@@ -116,32 +128,20 @@ public class PlayerMovement : MonoBehaviour {
         if (rb.velocity.y < fallClamp)
         {
             rb.velocity = new Vector2(rb.velocity.x, fallClamp);
-            horizontalMovement = false;
-        }
-        else
-        {
-            horizontalMovement = true;
         }
     }
 
     private void UpdateStateBools()
     {
-        isRunning = rb.velocity.x != 0;
-
-        if (isJumping)
-        {
-            isRunning = false;
-            isFalling = false;
-			animator.SetBool("isFalling", false);
-        }
-
-        if (isGrounded)
+        if (isJumping && rb.velocity.y <= 0) // Check if player is falling after jumping
         {
             isJumping = false;
-			animator.SetBool("isJumping", false);
-			
+            isFalling = true;
+        }
+
+        if (isGrounded && !isJumping) // Check if player is on the ground and not jumping
+        {
             isFalling = false;
-			animator.SetBool("isFalling", false);
         }
     }
 
