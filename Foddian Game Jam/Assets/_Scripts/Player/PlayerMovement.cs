@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour {
     // References
     public Rigidbody2D rb;
     [SerializeField] private PlayerSpriteRenderer playerSpriteRenderer;
+	public Animator animator;
 
     // Moving vars
     [SerializeField] private float baseMoveSpeed;
@@ -63,20 +64,33 @@ public class PlayerMovement : MonoBehaviour {
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, groundLayer);
-
+		if (isGrounded){
+			animator.SetBool("isGrounded", true);
+		} else {
+			animator.SetBool("isGrounded", false);
+		}
         CheckJumpTime();
 
         if (canJump && isGrounded) {
             isJumping = true;
+			animator.SetBool("isJumping", true);
+			
             jumpTimer = 0f;
             isFalling = false;
+			animator.SetBool("isFalling", false);
+			
             canJump = false;
+			isGrounded = false;
+			animator.SetBool("isGrounded", false);
             rb.velocity = Vector2.up * jumpForce;
         }
-    
+		
         if (rb.velocity.y < 0f) {
             isJumping = false;
+			animator.SetBool("isJumping", false);
+			
             isFalling = true;
+			animator.SetBool("isFalling", true);
         }
 
         if (isFalling)
@@ -93,6 +107,7 @@ public class PlayerMovement : MonoBehaviour {
         if (jumpTimer > timeBtwJumps)
         {
             canJump = true;
+			animator.SetBool("canJump", true);
         }
     }
 
@@ -117,12 +132,16 @@ public class PlayerMovement : MonoBehaviour {
         {
             isRunning = false;
             isFalling = false;
+			animator.SetBool("isFalling", false);
         }
 
         if (isGrounded)
         {
             isJumping = false;
+			animator.SetBool("isJumping", false);
+			
             isFalling = false;
+			animator.SetBool("isFalling", false);
         }
     }
 
