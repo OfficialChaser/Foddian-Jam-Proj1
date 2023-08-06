@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
@@ -24,6 +26,7 @@ public class PlayerMovement : MonoBehaviour {
     private float jumpTimer;
     public bool isJumping { get; private set; }
     public bool isFalling { get; private set; }
+    public bool isBigFalling { get; private set; }
 
     // Grounded vars
     public bool isGrounded { get; private set; }
@@ -31,12 +34,12 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float checkRadius;
     [SerializeField] private LayerMask groundLayer;
 
-    // Fall Clamp
+    // Fall
     [SerializeField] private float fallClamp = -10f;
+    [SerializeField] private float maxFallTime;
+    private float fallTimeCounter;
+    private bool checkingFall;
 
-    // Animation vars
-    const string Player_Jump = "Player Jump";
-    const string PLAYER_FALL = "Player Fall";
 
     void Start()
     {
@@ -49,10 +52,13 @@ public class PlayerMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Debug.Log(horizontalMovement);
         if (horizontalMovement)
         {
             moveInput = Input.GetAxisRaw("Horizontal");
+        }
+        else
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
         }
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
     }
@@ -64,7 +70,6 @@ public class PlayerMovement : MonoBehaviour {
         CalculateMovementSpeed();
         CalculateJumpForce();
 
-
         CheckJumpTime();
 
         if (canJump && isGrounded) {
@@ -75,14 +80,15 @@ public class PlayerMovement : MonoBehaviour {
                     canJump = false;
                     rb.velocity = Vector2.up * jumpForce;
                 }
-            }
-
-        if (isFalling)
-        {
-            FallClampCheck();
         }
 
+        FallClampCheck();
         UpdateStateBools();
+
+        if (isFalling && !checkingFall)
+        {
+            StartCoroutine(BigFallCheck());
+        }
     }
 
     void LateUpdate()
@@ -100,7 +106,14 @@ public class PlayerMovement : MonoBehaviour {
             }
             else if (isFalling)
             {
-                playerSpriteRenderer.ChangeAnimationState("Player_Fall_Loop");
+                if (isBigFalling)
+                {
+                    playerSpriteRenderer.ChangeAnimationState("Player_BigFall_Loop");
+                }
+                else 
+                {
+                    playerSpriteRenderer.ChangeAnimationState("Player_Fall_Loop");
+                }
             }
         }
 
@@ -131,6 +144,28 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
+    private IEnumerator BigFallCheck()
+    {
+        checkingFall = true;
+        fallTimeCounter = 0f;
+        
+        while (isFalling)
+        {
+            fallTimeCounter += Time.deltaTime;
+            if (fallTimeCounter > maxFallTime)
+            {
+                isBigFalling = true;
+                horizontalMovement = false;
+            }
+
+            yield return null;
+        }
+
+        horizontalMovement = true;
+        fallTimeCounter = 0f;
+        checkingFall = false;
+    }
+
     private void UpdateStateBools()
     {
         if (isJumping && rb.velocity.y <= 0) // Check if player is falling after jumping
@@ -142,6 +177,12 @@ public class PlayerMovement : MonoBehaviour {
         if (isGrounded && !isJumping) // Check if player is on the ground and not jumping
         {
             isFalling = false;
+            isBigFalling = false;
+        }
+
+        if (!isFalling)
+        {
+            isBigFalling = false;
         }
     }
 

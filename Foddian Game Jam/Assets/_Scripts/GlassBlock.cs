@@ -11,6 +11,8 @@ public class GlassBlock : MonoBehaviour
     [SerializeField] private float lifespan;
     [SerializeField] private float regenerationTime;
     private float currentRegenerationTime;
+
+    private bool animationInProgress = false;
 	
 	//Sprite Management
 	[SerializeField] private List<Sprite> sprites;
@@ -23,47 +25,50 @@ public class GlassBlock : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && !animationInProgress)
         {
+            Debug.Log("Hit");
             StartCoroutine(GlassBreakAndRegenerateSequence());
         }
     }
 
     private IEnumerator GlassBreakAndRegenerateSequence()
     {
+        animationInProgress = true;
         float elapsed = 0f;
 
         while (elapsed < lifespan)
         {
             elapsed += Time.deltaTime;
 
-            if (elapsed > lifespan / 4f)
+            if (elapsed > lifespan / 2f)
             {
-                spriteRenderer.sprite = sprites[0];
-            } 
-            else if (elapsed > lifespan / 2f)
-            {
-                spriteRenderer.sprite = sprites[1];
+                Debug.Log("3");
+                spriteRenderer.sprite = sprites[3];
             }
-            else if (elapsed > lifespan / 0.5f)
+            else if (elapsed > lifespan / 4f)
             {
+                Debug.Log("2");
                 spriteRenderer.sprite = sprites[2];
             }
-			else
-			{
-				spriteRenderer.sprite = sprites[3];
-			}
+            else
+            {
+                Debug.Log("1");
+                spriteRenderer.sprite = sprites[1];
+            }
 
             yield return null;
         }
 
         bCollider.enabled = false;
         spriteRenderer.enabled = false;
+        Debug.Log("Broken");
 
         yield return new WaitForSeconds(regenerationTime);
 
         bCollider.enabled = true;
         spriteRenderer.sprite = sprites[0];
         spriteRenderer.enabled = true;
+        animationInProgress = false;
     }
 }
