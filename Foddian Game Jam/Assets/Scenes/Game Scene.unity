@@ -1376,7 +1376,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 298008619}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.278, y: -1.206, z: 0}
+  m_LocalPosition: {x: -8.92, y: 7.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1410,6 +1410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   playerSpriteRenderer: {fileID: 298008624}
+  animator: {fileID: 298008628}
   baseMoveSpeed: 0
   moveSpeed: 4.5
   jumpForce: 20
@@ -1465,8 +1466,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.004750252, y: 0.28030354}
-  m_Size: {x: 0.8764782, y: 0.8764783}
+  m_Offset: {x: 0.036984444, y: -0.0702678}
+  m_Size: {x: 0.8931713, y: 0.94325376}
   m_Direction: 0
 --- !u!95 &298008628
 Animator:
@@ -4879,6 +4880,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc3fc2f05f6549349930e250d0158a8e, type: 3}
+--- !u!212 &1161898319 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 251119637063154481, guid: cc3fc2f05f6549349930e250d0158a8e, type: 3}
+  m_PrefabInstance: {fileID: 8200949443268655929}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1169530481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4984,7 +4990,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 274, y: 186}
+  m_AnchoredPosition: {x: 274, y: NaN}
   m_SizeDelta: {x: -645.7045, y: -414.2118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1176568214
@@ -6877,7 +6883,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: NaN}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1920025632
@@ -7940,6 +7946,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 67755600}
     m_Modifications:
+    - target: {fileID: 609511311594240585, guid: cc3fc2f05f6549349930e250d0158a8e, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 1161898319}
     - target: {fileID: 6592937370527996246, guid: cc3fc2f05f6549349930e250d0158a8e, type: 3}
       propertyPath: m_RootOrder
       value: -1

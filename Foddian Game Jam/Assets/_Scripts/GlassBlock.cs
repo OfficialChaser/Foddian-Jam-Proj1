@@ -6,11 +6,14 @@ public class GlassBlock : MonoBehaviour
 {
     // Self References
     private BoxCollider2D bCollider;
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
 
     [SerializeField] private float lifespan;
     [SerializeField] private float regenerationTime;
     private float currentRegenerationTime;
+	
+	//Sprite Management
+	[SerializeField] private List<Sprite> sprites;
 
     private void Awake()
     {
@@ -36,16 +39,20 @@ public class GlassBlock : MonoBehaviour
 
             if (elapsed > 0.75f)
             {
-                // Change Sprite
+                spriteRenderer.sprite = sprites[0];
             } 
             else if (elapsed > 0.5f)
             {
-                // Change Sprite
+                spriteRenderer.sprite = sprites[1];
             }
             else if (elapsed > 0.25f)
             {
-                // Change Sprite
+                spriteRenderer.sprite = sprites[2];
             }
+			else
+			{
+				spriteRenderer.sprite = sprites[3];
+			}
 
             yield return null;
         }
