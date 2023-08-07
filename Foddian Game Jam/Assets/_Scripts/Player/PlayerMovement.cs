@@ -72,14 +72,17 @@ public class PlayerMovement : MonoBehaviour {
 
         CheckJumpTime();
 
-        if (canJump && isGrounded) {
-                if (!isJumping) {
-                    isJumping = true;
-                    jumpTimer = 0f;
-                    isFalling = false;
-                    canJump = false;
-                    rb.velocity = Vector2.up * jumpForce;
-                }
+        if (canJump && isGrounded)
+        {
+            if (!isJumping)
+            {
+                StartCoroutine(StartJumpAnim()); // Start the jump animation
+                isJumping = true;
+                jumpTimer = 0f;
+                isFalling = false;
+                canJump = false;
+                rb.velocity = Vector2.up * jumpForce;
+            }
         }
 
         FallClampCheck();
@@ -91,6 +94,12 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
+    private IEnumerator StartJumpAnim()
+    {
+        playerSpriteRenderer.ChangeAnimationState("Player_Jump");
+        yield return new WaitForSeconds(0.3f); // Adjust the delay if needed
+        playerSpriteRenderer.ChangeAnimationState("Player_Jump_Loop");
+    }
     void LateUpdate()
     {
         // Player Animation

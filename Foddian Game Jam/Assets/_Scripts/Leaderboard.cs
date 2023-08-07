@@ -22,7 +22,6 @@ public class Leaderboard : MonoBehaviour
         string playerID = PlayerPrefs.GetString("PlayerID");
         LootLockerSDKManager.SubmitScore(playerID, scoreToUpload, leaderboardID, (response) =>
          {
-            Debug.Log("dsdddsf");
              if(response.success)
              {
                  Debug.Log("Successfully uploaded score");
