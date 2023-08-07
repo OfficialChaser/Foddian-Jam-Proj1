@@ -8,8 +8,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Leaderboard leaderboard;
-
     public static GameManager Instance;
 
     [SerializeField] private float elapsedTime;
@@ -18,6 +16,8 @@ public class GameManager : MonoBehaviour
     private bool timerGoing;
 
     [SerializeField] private PlayerMovement playerMovement;
+
+    [SerializeField] private AudioClip gameplayMusic;
 
     private void Awake()
     {
@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
         timerText.text = "Time: 00:00.00";
         timerGoing = false;
         BeginTimer();
+
+        SoundManager.Instance.PlayMusic(gameplayMusic);
     }
 
 

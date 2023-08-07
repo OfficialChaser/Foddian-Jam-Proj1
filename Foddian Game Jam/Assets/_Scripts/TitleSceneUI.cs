@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class TitleSceneUI : MonoBehaviour
 {
+    [SerializeField] private AudioClip menuMusic;
+
+    private void Start()
+    {
+        SoundManager.Instance.PlayMusic(menuMusic);
+    }
     public void LoadGame()
     {
         Transition.Instance.PlayTransition("Start Transition");
