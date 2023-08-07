@@ -10,10 +10,12 @@ public class WinScreenUI : MonoBehaviour
     [SerializeField] private Leaderboard leaderboard;
     [SerializeField] private TextMeshProUGUI timeText;
     private TimeSpan timePlaying;
+    [SerializeField] private AudioClip winMusic;
 
     private void Start()
     {
         StartCoroutine(ShowFinalTime());
+        SoundManager.Instance.PlayMusic(winMusic);
     }
 
     [ContextMenu("test")]

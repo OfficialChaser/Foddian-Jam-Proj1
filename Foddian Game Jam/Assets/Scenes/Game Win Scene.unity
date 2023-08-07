@@ -1188,6 +1188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leaderboard: {fileID: 45633421}
   timeText: {fileID: 1073041765}
+  winMusic: {fileID: 8300000, guid: 473df8367bb4bab448fb15c07f922a7f, type: 3}
 --- !u!1 &1073041763
 GameObject:
   m_ObjectHideFlags: 0
