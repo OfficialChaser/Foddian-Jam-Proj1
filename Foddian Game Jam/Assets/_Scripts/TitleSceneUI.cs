@@ -9,7 +9,8 @@ public class TitleSceneUI : MonoBehaviour
 
     private void Start()
     {
-        SoundManager.Instance.PlayMusic(menuMusic);
+        SoundManager.Instance.StopAllAudio();
+		SoundManager.Instance.PlayMusic(menuMusic);
     }
 
     public void LoadGame()

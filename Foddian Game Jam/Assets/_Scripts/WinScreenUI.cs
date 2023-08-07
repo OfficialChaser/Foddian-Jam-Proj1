@@ -16,7 +16,8 @@ public class WinScreenUI : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(ShowFinalTime());
+        SoundManager.Instance.StopAllAudio();
+		StartCoroutine(ShowFinalTime());
         StartCoroutine(MusicEndSequence());
     }
 
@@ -42,7 +43,8 @@ public class WinScreenUI : MonoBehaviour
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene("Title Scene");
+        SoundManager.Instance.StopAllAudio();
+		SceneManager.LoadScene("Title Scene");
     }
 
 }
