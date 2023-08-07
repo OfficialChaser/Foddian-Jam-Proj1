@@ -17,11 +17,17 @@ public class PlayerCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Finish Platform"))
             {
-                if (player.isGrounded)
+                
+				/*
+				if (player.isGrounded)
                 {
                     player.rb.velocity = Vector2.zero;
                     GameManager.Instance.StartEndSequence();
                 }
+				*/
+				
+				player.rb.velocity = Vector2.zero;
+                GameManager.Instance.StartEndSequence();
             }
     }
 }

@@ -44,6 +44,8 @@ public class PlayerMovement : MonoBehaviour {
     private float fallTimeCounter;
     private bool checkingFall;
     private bool justBigFell = false;
+	
+	
 
 
     void Start()

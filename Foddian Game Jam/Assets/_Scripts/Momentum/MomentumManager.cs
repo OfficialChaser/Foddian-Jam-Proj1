@@ -19,6 +19,8 @@ public class MomentumManager : MonoBehaviour
     [SerializeField] private AudioClip acornSFX;
     [SerializeField] private AudioClip flowerSFX;
 
+	
+	private float speedMultiplier = 1.75f;
     private void Awake()
     {
         currentHorizontalMomentum = 0f;
@@ -37,6 +39,10 @@ public class MomentumManager : MonoBehaviour
     {
         currentHorizontalMomentum -= Time.deltaTime;
         currentJumpMomentum -= 2 * Time.deltaTime;
+		
+		if (player.isBigFalling) {
+			currentJumpMomentum = 0f;
+		}
 
         CheckMomentumStatus();
         UpdateMomentumBar();
@@ -44,7 +50,7 @@ public class MomentumManager : MonoBehaviour
 
     public void ModifyHorizontalMomentum(float change)
     {
-        currentHorizontalMomentum += change;
+        currentHorizontalMomentum += change * speedMultiplier;
         SoundManager.Instance.PlaySound(acornSFX);
     }
 
