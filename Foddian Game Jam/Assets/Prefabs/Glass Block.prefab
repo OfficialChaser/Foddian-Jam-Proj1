@@ -146,6 +146,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 251119637063154481}
   lifespan: 0.25
   regenerationTime: 10
+  hitSFX: {fileID: 8300000, guid: 96404aa54ac864043a5cd00c49048079, type: 3}
   sprites:
   - {fileID: 21300000, guid: a3cb3c3d90175e34fb0874c27f9bef04, type: 3}
   - {fileID: 21300000, guid: 35c1d68ac987bab49b3b1f45c9f2b725, type: 3}

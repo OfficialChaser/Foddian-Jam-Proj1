@@ -18,7 +18,6 @@ public class CameraSector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(panning);
         if (other.gameObject.CompareTag("Player") && !panning)
         {
             panning = true;

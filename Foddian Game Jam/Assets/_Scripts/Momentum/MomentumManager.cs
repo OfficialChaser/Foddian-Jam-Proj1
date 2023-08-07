@@ -15,6 +15,10 @@ public class MomentumManager : MonoBehaviour
     public float currentJumpMomentum { get; private set; }
     [SerializeField] private float maxJumpMomentum;
 
+    // Audio Clips
+    [SerializeField] private AudioClip acornSFX;
+    [SerializeField] private AudioClip flowerSFX;
+
     private void Awake()
     {
         currentHorizontalMomentum = 0f;
@@ -41,11 +45,13 @@ public class MomentumManager : MonoBehaviour
     public void ModifyHorizontalMomentum(float change)
     {
         currentHorizontalMomentum += change;
+        SoundManager.Instance.PlaySound(acornSFX);
     }
 
     public void ModifyJumpForce(float change)
     {
         currentJumpMomentum += change;
+        SoundManager.Instance.PlaySound(flowerSFX);
     }
 
     private void CheckMomentumStatus()

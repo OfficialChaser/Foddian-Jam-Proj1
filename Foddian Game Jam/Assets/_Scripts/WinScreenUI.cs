@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class WinScreenUI : MonoBehaviour
 {
@@ -11,11 +12,12 @@ public class WinScreenUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timeText;
     private TimeSpan timePlaying;
     [SerializeField] private AudioClip winMusic;
+    [SerializeField] private AudioClip menuMusic;
 
     private void Start()
     {
         StartCoroutine(ShowFinalTime());
-        SoundManager.Instance.PlayMusic(winMusic);
+        StartCoroutine(MusicEndSequence());
     }
 
     [ContextMenu("test")]
@@ -29,6 +31,18 @@ public class WinScreenUI : MonoBehaviour
         timeText.text = timePlayingStr;
         yield return new WaitForSeconds(1f);
         StartCoroutine(leaderboard.SubmitScoreRoutine(roundedElapsedTime));
+    }
+
+    private IEnumerator MusicEndSequence()
+    {   
+        SoundManager.Instance.PlaySound(winMusic);
+        yield return new WaitForSeconds(8f);
+        SoundManager.Instance.PlayMusic(menuMusic);
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("Title Scene");
     }
 
 }

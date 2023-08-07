@@ -11,9 +11,9 @@ public class TitleSceneUI : MonoBehaviour
     {
         SoundManager.Instance.PlayMusic(menuMusic);
     }
+
     public void LoadGame()
     {
-        Transition.Instance.PlayTransition("Start Transition");
         SceneManager.LoadScene("Game Scene");
     }
 

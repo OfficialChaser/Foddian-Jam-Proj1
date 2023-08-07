@@ -13,6 +13,8 @@ public class GlassBlock : MonoBehaviour
     private float currentRegenerationTime;
 
     private bool animationInProgress = false;
+
+    [SerializeField] private AudioClip hitSFX;
 	
 	//Sprite Management
 	[SerializeField] private List<Sprite> sprites;
@@ -27,7 +29,6 @@ public class GlassBlock : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") && !animationInProgress)
         {
-            Debug.Log("Hit");
             StartCoroutine(GlassBreakAndRegenerateSequence());
         }
     }
@@ -43,17 +44,14 @@ public class GlassBlock : MonoBehaviour
 
             if (elapsed > lifespan / 2f)
             {
-                Debug.Log("3");
                 spriteRenderer.sprite = sprites[3];
             }
             else if (elapsed > lifespan / 4f)
             {
-                Debug.Log("2");
                 spriteRenderer.sprite = sprites[2];
             }
             else
             {
-                Debug.Log("1");
                 spriteRenderer.sprite = sprites[1];
             }
 
@@ -62,7 +60,7 @@ public class GlassBlock : MonoBehaviour
 
         bCollider.enabled = false;
         spriteRenderer.enabled = false;
-        Debug.Log("Broken");
+        SoundManager.Instance.PlaySound(hitSFX);
 
         yield return new WaitForSeconds(regenerationTime);
 

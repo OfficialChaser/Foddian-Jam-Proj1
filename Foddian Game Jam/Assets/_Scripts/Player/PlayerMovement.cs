@@ -9,6 +9,10 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private PlayerSpriteRenderer playerSpriteRenderer;
 	public Animator animator;
 
+    // Audio Clips
+    [SerializeField] private AudioClip jumpSFX;
+    [SerializeField] private List<AudioClip> taunts = new List<AudioClip>();
+
     // Moving vars
     [SerializeField] private float baseMoveSpeed;
     [SerializeField] private float moveSpeed;
@@ -39,6 +43,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float maxFallTime;
     private float fallTimeCounter;
     private bool checkingFall;
+    private bool justBigFell = false;
 
 
     void Start()
@@ -77,6 +82,7 @@ public class PlayerMovement : MonoBehaviour {
             if (!isJumping)
             {
                 StartCoroutine(StartJumpAnim()); // Start the jump animation
+                SoundManager.Instance.PlaySound(jumpSFX);
                 isJumping = true;
                 jumpTimer = 0f;
                 isFalling = false;
@@ -106,6 +112,12 @@ public class PlayerMovement : MonoBehaviour {
         if (isGrounded)
         {
             playerSpriteRenderer.ChangeAnimationState("Player_Jump");
+
+            if (justBigFell)
+            {
+                SoundManager.Instance.PlaySound(taunts[Random.Range(0, taunts.Count)]);
+                justBigFell = false;
+            }
         } 
         else 
         {
@@ -165,6 +177,7 @@ public class PlayerMovement : MonoBehaviour {
             {
                 isBigFalling = true;
                 horizontalMovement = false;
+                justBigFell = true;
             }
 
             yield return null;
