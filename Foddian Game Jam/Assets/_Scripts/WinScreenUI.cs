@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -12,11 +13,11 @@ public class WinScreenUI : MonoBehaviour
 
     private void Start()
     {
-        ShowFinalTime();
+        StartCoroutine(ShowFinalTime());
     }
 
     [ContextMenu("test")]
-    private void ShowFinalTime()
+    private IEnumerator ShowFinalTime()
     {
         float elapsedTime = PlayerPrefs.GetFloat("Recent Time", 0f);
         Debug.Log(elapsedTime);
@@ -24,7 +25,8 @@ public class WinScreenUI : MonoBehaviour
         timePlaying = TimeSpan.FromSeconds(elapsedTime);
         string timePlayingStr = timePlaying.ToString("m':'s'.'ff");
         timeText.text = timePlayingStr;
-        leaderboard.SubmitScoreRoutine(roundedElapsedTime);
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(leaderboard.SubmitScoreRoutine(roundedElapsedTime));
     }
 
 }
