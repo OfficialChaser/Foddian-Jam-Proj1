@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Leaderboard leaderboard;
+
     public static GameManager Instance;
 
     [SerializeField] private float elapsedTime;
@@ -39,6 +42,8 @@ public class GameManager : MonoBehaviour
         timerGoing = false;
         PlayerPrefs.SetFloat("Recent Time", elapsedTime);
         playerMovement.enabled = false;
+
+        SceneManager.LoadScene("Game Win Scene");
     }
 
     // Timer Stuff
